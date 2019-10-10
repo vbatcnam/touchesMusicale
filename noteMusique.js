@@ -54,7 +54,6 @@ for(let note in tab_notesFrequences){
 	baliseBouton.appendChild(texte);
 	//ajout un event
 	baliseBouton.addEventListener('mousedown',function(){
-		console.log(baliseBouton.id);
 		createNote(baliseBouton.id, 3);
 	});
 	baliseBouton.addEventListener('mouseup',function(evt){
@@ -63,20 +62,38 @@ for(let note in tab_notesFrequences){
 	zoneMusicale.appendChild(baliseBouton);
 }
 
+//generer les touches
+for(let note in tab_notesFrequences){
+	let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+	rect.id = note;
+	rect.setAttribute("width", 23)
+	let texte = document.createTextNode(note);
+	baliseBouton.appendChild(texte);
+	//ajout un event
+	baliseBouton.addEventListener('mousedown',function(){
+		createNote(baliseBouton.id, 3);
+	});
+	baliseBouton.addEventListener('mouseup',function(evt){
+		oscillateur.stop();
+	});
+	zoneMusicale.appendChild(baliseBouton);
+}
+
+
 var oscillateur;
 
 function createNote(str_note, int_octave){
 	let hertz = tab_notesFrequences[str_note][int_octave];
 	oscillateur = contexteAudio.createOscillator();
 	oscillateur.frequency.value = hertz;
+/**
+Chaîne de caractères indiquant la forme de l'onde générée. Différentes ondes produisent différentes tonalités.  Les valeurs standard sont "sine", "square", "sawtooth", "triangle" et "custom". La valeur par défault is "sine". custom permet d'utiliser une PeriodicWave pour décrire une forme d'onde personnalisée.
+*/
 	oscillateur.type = 'triangle';
 	oscillateur.connect(contexteAudio.destination);
 	oscillateur.start();
 }
 
-/**
-Chaîne de caractères indiquant la forme de l'onde générée. Différentes ondes produisent différentes tonalités.  Les valeurs standard sont "sine", "square", "sawtooth", "triangle" et "custom". La valeur par défault is "sine". custom permet d'utiliser une PeriodicWave pour décrire une forme d'onde personnalisée.
-*/
 
 
 //Low Frequency Oscillator
