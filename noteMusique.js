@@ -5,6 +5,12 @@ L'interface AudioContext représente un graphe de traitement audio fait de modul
 */
 var contexteAudio = new AudioContext();
 
+//créer le son du trombone
+var wave_trombone = contexteAudio.createPeriodicWave(
+	new Float32Array(trombone.real), 
+	new Float32Array(trombone.imag)
+);
+
 /**
 L'interface OscillatorNode représente un signal périodique, une sinusoïde par exemple. C'est un module de traitement audio AudioNode qui crée un signal sinusoïdal à une fréquence donnée — c'est-à-dire génère une tonalité constante.
 */
@@ -13,12 +19,18 @@ var oscillateur;
 /** oscillateur.type :
 Chaîne de caractères indiquant la forme de l'onde générée. Différentes ondes produisent différentes tonalités.  Les valeurs standard sont "sine", "square", "sawtooth", "triangle" et "custom". La valeur par défault is "sine". custom permet d'utiliser une PeriodicWave pour décrire une forme d'onde personnalisée.
 */
-function createNote(str_note, int_octave, str_type){
+function createNote(str_note, int_octave, str_type, wave){
 	let hertz = tab_notesFrequences[str_note][int_octave];
 	oscillateur = contexteAudio.createOscillator();
 	oscillateur.frequency.value = hertz;
 
-	oscillateur.type = str_type;
+	// oscillateur.type = str_type;
+	// console.log('eeeee');
+	if(str_type === "custom"){
+		oscillateur.setPeriodicWave(wave);
+	} else {
+		oscillateur.type = str_type;
+	}
 	oscillateur.connect(contexteAudio.destination);
 	oscillateur.start();
 }
@@ -60,7 +72,7 @@ function createToucheRect(id, h, w, x, y, fond, bordure){
 	rect.setAttribute("y", y);
 	let texte = document.createTextNode(id);
 	rect.appendChild(texte);
-	return 	rect;
+	return rect;
 }
 
 //générer les boutons
@@ -69,7 +81,10 @@ for(let note in tab_notesFrequences){
 	
 	//ajout events
 	baliseBouton.addEventListener('mousedown',function(){
-		createNote(baliseBouton.id, 3, 'triangle');
+		// createNote(baliseBouton.id, 3, 'triangle');
+		// createNote(baliseBouton.id, 3, 'sawtooth');
+		createNote(baliseBouton.id, 3, 'custom', wave_trombone);
+		// createNote(baliseBouton.id, 3, 'custom');
 	});
 	baliseBouton.addEventListener('mouseup',function(evt){
 		oscillateur.stop();
@@ -94,6 +109,7 @@ for(let note in tab_notesFrequences){
 	});
 	zoneSVG.appendChild(touche);
 }
+
 
 //Low Frequency Oscillator
 //var LFO = contexteAudio.createOscillator();
