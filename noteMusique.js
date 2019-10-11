@@ -8,26 +8,20 @@ var contexteAudio = new AudioContext();
 /**
 L'interface OscillatorNode représente un signal périodique, une sinusoïde par exemple. C'est un module de traitement audio AudioNode qui crée un signal sinusoïdal à une fréquence donnée — c'est-à-dire génère une tonalité constante.
 */
-//tableau de la gamme avec son numéro de demi-ton dans une octave.
-var gamme = {
-	'do': 0,
-	'do#': 1,
-	'réb': 1, 
-	'ré': 2 ,
-	'ré#': 3, 
-	'mib': 3,
-	'mi': 4, 
-	'fa': 5, 
-	'fa#': 6,
-	'solb': 6, 
-	'sol': 7, 
-	'sol#': 8,
-	'lab': 8, 
-	'la': 9, 
-	'la#': 10,
-	'sib': 10, 
-	'si': 11 
-};
+var oscillateur;
+
+/** oscillateur.type :
+Chaîne de caractères indiquant la forme de l'onde générée. Différentes ondes produisent différentes tonalités.  Les valeurs standard sont "sine", "square", "sawtooth", "triangle" et "custom". La valeur par défault is "sine". custom permet d'utiliser une PeriodicWave pour décrire une forme d'onde personnalisée.
+*/
+function createNote(str_note, int_octave, str_type){
+	let hertz = tab_notesFrequences[str_note][int_octave];
+	oscillateur = contexteAudio.createOscillator();
+	oscillateur.frequency.value = hertz;
+
+	oscillateur.type = str_type;
+	oscillateur.connect(contexteAudio.destination);
+	oscillateur.start();
+}
 
 var tab_notesFrequences ={
 	'do':[32.703,65.406,130.81,261.63,523.25,1046.5,2093,4186,8372,16744],
@@ -43,58 +37,63 @@ var tab_notesFrequences ={
 	'la#':[58.27,116.54,233.08,466.16,932.33,1864.7,3729.3,7458.6,14917,29834],
 	'si':[61.735,123.47,246.94,493.88,987.77,1975.5,3951.1,7902.1,15804,31609]
 };
+
 //récupère le div.
 var zoneMusicale = document.getElementById('zoneMusicale');
 
-//generer les boutons
-for(let note in tab_notesFrequences){
-	let baliseBouton = document.createElement('button');
-	baliseBouton.setAttribute('id', note);
-	let texte = document.createTextNode(note);
-	baliseBouton.appendChild(texte);
-	//ajout un event
-	baliseBouton.addEventListener('mousedown',function(){
-		createNote(baliseBouton.id, 3);
-	});
-	baliseBouton.addEventListener('mouseup',function(evt){
-		oscillateur.stop();
-	});
-	zoneMusicale.appendChild(baliseBouton);
+function createButton(id){
+	let button = document.createElement('button');
+	button.setAttribute('id', id);
+	let texte = document.createTextNode(id);
+	button.appendChild(texte);
+	return button;
 }
 
-//generer les touches
-for(let note in tab_notesFrequences){
+function createToucheRect(id, h, w, x, y, fond, bordure){
 	let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-	rect.id = note;
-	rect.setAttribute("width", 23)
-	let texte = document.createTextNode(note);
-	baliseBouton.appendChild(texte);
-	//ajout un event
+	rect.id = id;
+	rect.setAttribute("fill", fond);
+	rect.setAttribute("stroke", bordure);
+	rect.setAttribute("width", w);
+	rect.setAttribute("height", h);
+	rect.setAttribute("x", x);
+	rect.setAttribute("y", y);
+	let texte = document.createTextNode(id);
+	rect.appendChild(texte);
+	return 	rect;
+}
+
+//générer les boutons
+for(let note in tab_notesFrequences){
+	let baliseBouton = createButton(note);
+	
+	//ajout events
 	baliseBouton.addEventListener('mousedown',function(){
-		createNote(baliseBouton.id, 3);
+		createNote(baliseBouton.id, 3, 'triangle');
 	});
 	baliseBouton.addEventListener('mouseup',function(evt){
 		oscillateur.stop();
 	});
+	
 	zoneMusicale.appendChild(baliseBouton);
 }
 
-
-var oscillateur;
-
-function createNote(str_note, int_octave){
-	let hertz = tab_notesFrequences[str_note][int_octave];
-	oscillateur = contexteAudio.createOscillator();
-	oscillateur.frequency.value = hertz;
-/**
-Chaîne de caractères indiquant la forme de l'onde générée. Différentes ondes produisent différentes tonalités.  Les valeurs standard sont "sine", "square", "sawtooth", "triangle" et "custom". La valeur par défault is "sine". custom permet d'utiliser une PeriodicWave pour décrire une forme d'onde personnalisée.
-*/
-	oscillateur.type = 'triangle';
-	oscillateur.connect(contexteAudio.destination);
-	oscillateur.start();
+var zoneSVG = document.getElementById('zoneMusique');
+//générer les touches en svg
+var positionTouche = {x:0,y:0};
+for(let note in tab_notesFrequences){
+	let touche = createToucheRect (note, 120, 20, positionTouche.x, positionTouche.y, 'white', 'blue');
+	positionTouche.x += 20;
+	
+	//ajout un event
+	touche.addEventListener('mousedown',function(){
+		createNote(touche.id, 3, 'triangle');
+	});
+	touche.addEventListener('mouseup',function(evt){
+		oscillateur.stop();
+	});
+	zoneSVG.appendChild(touche);
 }
-
-
 
 //Low Frequency Oscillator
 //var LFO = contexteAudio.createOscillator();
