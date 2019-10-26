@@ -19,8 +19,17 @@ var oscillateur;
 /** oscillateur.type :
 Chaîne de caractères indiquant la forme de l'onde générée. Différentes ondes produisent différentes tonalités.  Les valeurs standard sont "sine", "square", "sawtooth", "triangle" et "custom". La valeur par défault is "sine". custom permet d'utiliser une PeriodicWave pour décrire une forme d'onde personnalisée.
 */
+
+/*
+	il faut avoir le nom de la note et l'octave et trouver le quantième demi-ton par rapport au LA 440.
+
+	var tabDeDemiTon
+	sol 2 demi-ton en dessous du la
+	1 octave = 12 demi tons
+*/
+
 function createNote(str_note, int_octave, str_type, wave){
-	let hertz = tab_notesFrequences[str_note][int_octave];
+	let hertz = notes[str_note]["freq"][int_octave];
 	oscillateur = contexteAudio.createOscillator();
 	oscillateur.frequency.value = hertz;
 
@@ -35,20 +44,6 @@ function createNote(str_note, int_octave, str_type, wave){
 	oscillateur.start();
 }
 
-var tab_notesFrequences ={
-	'do':[32.703,65.406,130.81,261.63,523.25,1046.5,2093,4186,8372,16744],
-	'do#':[34.648,69.296,138.59,277.18,554.37,1108.7,2217.5,4434.9,8869.8,17740],
-	'ré':[36.708,73.416,146.83,293.66,587.33,1174.7,2349.3,4698.6,9397.3,18795],
-	'ré#':[38.891,77.782,155.56,311.13,622.25,1244.5,2489,4978,9956.1,19912],
-	'mi':[41.203,82.407,164.81,329.63,659.26,1318.5,2637,5274.10548,21096],
-	'fa':[43.654,87.307,174.61,349.23,698.46,1396.9,2793.8,5587.7,11175,22351],
-	'fa#':[46.249,92.499,185,369.99,739.99,1480,2960,5919.9,11840,23680],
-	'sol':[48.999,97.999,196,392,783.99,1568,3136,6271.9,12544,25088],
-	'sol#':[51.913,103.83,207.65,415.3,830.61,1661.2,3322.4,6644.9,13290,26580],
-	'la':[55,110,220,440,880,1760,3520,7040,14080,28160],
-	'la#':[58.27,116.54,233.08,466.16,932.33,1864.7,3729.3,7458.6,14917,29834],
-	'si':[61.735,123.47,246.94,493.88,987.77,1975.5,3951.1,7902.1,15804,31609]
-};
 var notes ={
 	'do':{
 		freq :[32.703,65.406,130.81,261.63,523.25,1046.5,2093,4186,8372,16744],
@@ -95,10 +90,21 @@ var notes ={
 		color:"rgb(0, 0, 139)"//darkBlue
 	},
 	'si':{
-		freq :[61.735,123.47,246.94,493.88,987.77,1975.5,3951.1,7902.1,15804,31609]
+		freq :[61.735,123.47,246.94,493.88,987.77,1975.5,3951.1,7902.1,15804,31609],
 		color:"rgb(138, 43, 226)"//BlueViolet
-	},
+	}
 };
+
+class Note {
+  constructor(nom, octave, colorRGB) {
+    this.nom = nom;
+    this.octave = octave;
+	this.color = color;
+	this.hertz = "";
+  }
+  
+  get hertz(){}
+}
 
 //récupère le div.
 var zoneMusicale = document.getElementById('zoneMusicale');
@@ -107,17 +113,7 @@ function createToucheRect(id, h, w, x, y, fond,  bordure){
 	let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 	rect.id = id;
 	rect.setAttribute("stroke", bordure);
-	console.log(id);
-	console.log(/#$/.test(id));
-	if(/#$/.test(id)){
-		rect.setAttribute("fill", bordure);
-		// rect.setAttribute("width", w);
-		// rect.setAttribute("height", h/1.5);
-	}else{
-		rect.setAttribute("fill", fond);
-		// rect.setAttribute("width", w);
-		// rect.setAttribute("height", h);
-	}
+	rect.setAttribute("fill", fond);
 	rect.setAttribute("width", w);
 	rect.setAttribute("height", h);
 
@@ -133,8 +129,8 @@ var zoneSVG = document.getElementById('zoneMusique');
 var positionTouche = {x:0,y:0};
 var wTouche = 50;
 var hTouche = 50;
-for(let note in tab_notesFrequences){
-	let touche = createToucheRect (note, hTouche, wTouche, positionTouche.x, positionTouche.y, 'coral', 'chocolate');
+for(let note in notes){
+	let touche = createToucheRect (note, hTouche, wTouche, positionTouche.x, positionTouche.y, notes[note]["color"], 'black');
 	positionTouche.x += wTouche;
 	
 	//ajout un event
