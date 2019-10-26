@@ -140,6 +140,13 @@ for(let note in notes){
 	touche.addEventListener('mouseup',function(evt){
 		oscillateur.stop();
 	});
+		touche.addEventListener('touchstart',function(){
+		createNote(touche.id, 3, 'triangle');
+	});
+	touche.addEventListener('touchend',function(evt){
+		oscillateur.stop();
+	});
+
 	zoneSVG.appendChild(touche);
 }
 
