@@ -53,21 +53,24 @@ var tab_notesFrequences ={
 //récupère le div.
 var zoneMusicale = document.getElementById('zoneMusicale');
 
-function createButton(id){
-	let button = document.createElement('button');
-	button.setAttribute('id', id);
-	let texte = document.createTextNode(id);
-	button.appendChild(texte);
-	return button;
-}
-
-function createToucheRect(id, h, w, x, y, fond, bordure){
+function createToucheRect(id, h, w, x, y, fond,  bordure){
 	let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 	rect.id = id;
-	rect.setAttribute("fill", fond);
 	rect.setAttribute("stroke", bordure);
+	console.log(id);
+	console.log(/#$/.test(id));
+	if(/#$/.test(id)){
+		rect.setAttribute("fill", bordure);
+		// rect.setAttribute("width", w);
+		// rect.setAttribute("height", h/1.5);
+	}else{
+		rect.setAttribute("fill", fond);
+		// rect.setAttribute("width", w);
+		// rect.setAttribute("height", h);
+	}
 	rect.setAttribute("width", w);
 	rect.setAttribute("height", h);
+
 	rect.setAttribute("x", x);
 	rect.setAttribute("y", y);
 	let texte = document.createTextNode(id);
@@ -75,30 +78,14 @@ function createToucheRect(id, h, w, x, y, fond, bordure){
 	return rect;
 }
 
-//générer les boutons
-for(let note in tab_notesFrequences){
-	let baliseBouton = createButton(note);
-	
-	//ajout events
-	baliseBouton.addEventListener('mousedown',function(){
-		// createNote(baliseBouton.id, 3, 'triangle');
-		// createNote(baliseBouton.id, 3, 'sawtooth');
-		createNote(baliseBouton.id, 3, 'custom', wave_trombone);
-		// createNote(baliseBouton.id, 3, 'custom');
-	});
-	baliseBouton.addEventListener('mouseup',function(evt){
-		oscillateur.stop();
-	});
-	
-	zoneMusicale.appendChild(baliseBouton);
-}
-
 var zoneSVG = document.getElementById('zoneMusique');
 //générer les touches en svg
 var positionTouche = {x:0,y:0};
+var wTouche = 50;
+var hTouche = 50;
 for(let note in tab_notesFrequences){
-	let touche = createToucheRect (note, 120, 20, positionTouche.x, positionTouche.y, 'white', 'blue');
-	positionTouche.x += 20;
+	let touche = createToucheRect (note, hTouche, wTouche, positionTouche.x, positionTouche.y, 'coral', 'chocolate');
+	positionTouche.x += wTouche;
 	
 	//ajout un event
 	touche.addEventListener('mousedown',function(){
