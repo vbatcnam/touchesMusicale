@@ -1,0 +1,6 @@
+$publicVar_ 
+	génère un événement 
+$actionForever_ 
+	fait une action à chaque instant
+$on_ 
+	Agit si l’éventement est présent
