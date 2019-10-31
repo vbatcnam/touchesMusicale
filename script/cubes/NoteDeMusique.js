@@ -6,13 +6,15 @@
 */
 
 class NoteDeMusique extends SCCube{
-	constructor(nom, octave){
+	constructor(nom, octave, x, y){
 		super(); //Cube
 		this.nom = nom;
 		this.octave = octave;
+		this.x = x; 
+		this.y = y;
 		this.color = this.getColor();
 		this.hertz = this.getHertz();
-		this.DessineMoi();
+		this.illustration = this.DessineMoi();
 	}
 	
 	getColor()
@@ -23,4 +25,20 @@ class NoteDeMusique extends SCCube{
 	
 	DessineMoi()
 	{}
+
+	$publicVar_monApparence(){
+		return {//les infos envoyées
+			id:this.nom,
+			octave:this.octave,
+			this.color = this.getColor();
+			this.hertz = this.getHertz();
+			x:this.x,
+			y:this.y,
+			dessin:this.illustration,
+			changement:this.changement,
+			age:this.age, // si c'est un jeune veau
+			taille:this.taille, //pour le mettre à l’échelle à l'écran
+		}
+	}
+	
 }
