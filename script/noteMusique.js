@@ -1,6 +1,10 @@
 'use strict';
 
 /**
+	Auteur : Véronique Lion
+	Date création : 2019-10-10 16:02:38
+	Copyright : © Véronique Lion 2019
+
 L'interface AudioContext représente un graphe de traitement audio fait de modules audio reliés entre eux, chaque module correspondant à un AudioNode. Un contexte audio contrôle à la fois la création des nœuds qu'il contient et l'exécution du traitement audio, ou du décodage. On commence toujours par créer un contexte audio, et tout ce qui va se passer ensuite se situera dans ce contexte.
 */
 var contexteAudio = new AudioContext();
