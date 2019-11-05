@@ -17,11 +17,38 @@ class NoteDeMusique extends SCCube{
 		this.illustration = this.DessineMoi();
 	}
 	
-	getColor()
-	{}
+	static getColor()
+	{
+		/**
+			couleurs de l'arc en ciel
+				DO rouge : 0
+				Ré orange: 30
+				Mi jaune : 60
+				Fa vert : 120
+				Sol aqua: 180
+				La bleu: 240
+				Si violet: 270
+			Pour les # on change la saturation
+				note normale saturation 100%, note # saturation 50%
+			Pour l'octave 3 (LA) la luminosité est à 50% (9 octaves)
+				Octave 0 = 10%
+				Octave 1 = 20%
+				Octave 2 = 35%
+				Octave 3 = 50%
+				Octave 4 = 60%
+				Octave 5 = 67%
+				Octave 6 = 74%
+				Octave 7 = 80%
+				Octave 8 = 85%
+				Octave 9 = 90%
+		*/
+		let tabColor = {'do':0, 'ré':30}
+	}
 	
-	getHertz()
-	{}
+	static getHertz()
+	{
+		//calculer
+	}
 	
 	DessineMoi()
 	{}
