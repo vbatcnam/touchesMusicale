@@ -50,7 +50,17 @@ class NoteDeMusique extends SCCube{
 	
 	static getHertz()
 	{
-		//calculer
+		//On se base sur le LA de la 3e octave, soit 440 hertz. 
+		/**
+		Une octave est constituée de 12 demi-tons. (les 6 notes + les notes#) 
+		Le double d'une fréquence donne un intervalle d'une octave.
+		pour calculer le rapport de fréquence entre 2 notes séparées d'un demi-tons il faut faire par exemple 440 * mdf et j’aurai le le la# de l'octave 3
+		Si je fais 440 / mdf, j’aurai sol# de l'octave 3
+		
+		Si je fais 440 * mdf * mdf, j'aurai Si de l'octave 3
+		Si je fais 440 / mdf / mdf, j'aurai sol de l'octave 3
+		*/
+		let mdf =  Math.pow(2,1/12); //multiplicateurDeFrequence
 	}
 	
 	dessineMoi()
