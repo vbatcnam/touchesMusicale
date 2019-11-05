@@ -32,7 +32,7 @@ class NoteDeMusique extends SCCube{
 				note normale saturation 100%, note # saturation 50%
 		*/
 		let tabColor = {'do':0, 'ré':30, 'mi':60, 'fa':120, 'sol':180, 'la':240, 'si':270};
-		let t = tabColor[this.nom]; //teinte
+		let h = tabColor[this.nom]; //teinte
 		let s = 100; //saturation
 		//Pour les # on change la saturation
 		if(/#/.test(this.nom)){
@@ -45,7 +45,7 @@ class NoteDeMusique extends SCCube{
 		//octave de 0 à 9. luminosité en %
 		let tabLum = [10,20,35,50,60,67,74,80,85,90];
 		let l = tabLum[this.octave]; //luminosité
-		return {t:t, s:s l:l};
+		return 'hsl(${h},${s}%,${l}%)';
 	}
 	
 	static getHertz()
@@ -54,18 +54,22 @@ class NoteDeMusique extends SCCube{
 	}
 	
 	dessineMoi()
-	{}
+	{
+		
+	}
 	
 	//s'allume lorsqu'on clique ou touche la note
 	anime();
-	{}
+	{
+		this.changement = '';//A faire
+	}
 
 	$publicVar_monApparence(){
 		return {//les infos envoyées
 			id:this.nom,
 			octave:this.octave,
-			this.color = this.getColor();
-			this.hertz = this.getHertz();
+			color : this.color;
+			hertz : this.hertz;
 			x:this.x,
 			y:this.y,
 			dessin:this.illustration,
