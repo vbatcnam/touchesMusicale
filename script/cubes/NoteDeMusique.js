@@ -11,16 +11,16 @@ class NoteDeMusique extends SCCube{
 	constructor(nom, octave, x, y){
 		super(); //Cube
 		this.nom = nom;
-		this.noteNum = attributUnNumero();
+		this.noteNum = attribueUnNumero();
 		this.octave = octave;
 		this.x = x; 
 		this.y = y;
-		this.color = this.attributUneCouleurHSL();
-		this.hertz = this.attributUnHertz();
+		this.color = this.attribueUneCouleurHSL();
+		this.hertz = this.attribueUnHertz();
 		this.illustration = this.DessineMoi();
 	}
 	
-	static attributUnNumero(){
+	static attribueUnNumero(){
 		let num = gamme.indexOf(this.nom);
 		if(this.octave == 0){
 			return num;
@@ -29,7 +29,7 @@ class NoteDeMusique extends SCCube{
 		}
 	}
 	
-	static attributUneCouleur()
+	static attribueUneCouleur()
 	{
 		/**
 			Chaque note à une couleur de l'arc en ciel
@@ -48,7 +48,7 @@ class NoteDeMusique extends SCCube{
 		return 'hsl(${h},${s}%,${l}%)';
 	}
 	
-	static attributUnHertz()
+	static attribueUnHertz()
 	{
 		//On se base sur le LA (indice 9 du tableau gamme) de la 3e octave (noteNum 45), soit 440 hertz. 
 		/**
