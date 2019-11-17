@@ -11,7 +11,7 @@ class NoteDeMusique extends SCCube{
 	constructor(nom, octave, x, y){
 		super(); //Cube
 		this.nom = nom;
-		this.noteNum = attribueUnNumero();
+		this.noteNum = this.attribueUnNumero();
 		this.octave = octave;
 		this.x = x; 
 		this.y = y;
@@ -20,16 +20,16 @@ class NoteDeMusique extends SCCube{
 		this.illustration = this.DessineMoi();
 	}
 	
-	static attribueUnNumero(){
+	attribueUnNumero(){
 		let num = gamme.indexOf(this.nom);
 		if(this.octave == 0){
 			return num;
 		}else{
-			return 12*octave + num;
+			return 12*this.octave + num;
 		}
 	}
 	
-	static attribueUneCouleur()
+	attribueUneCouleur()
 	{
 		/**
 			Chaque note à une couleur de l'arc en ciel
@@ -48,7 +48,7 @@ class NoteDeMusique extends SCCube{
 		return 'hsl(${h},${s}%,${l}%)';
 	}
 	
-	static attribueUnHertz()
+	attribueUnHertz()
 	{
 		//On se base sur le LA (indice 9 du tableau gamme) de la 3e octave (noteNum 45), soit 440 hertz. 
 		/**
@@ -71,7 +71,7 @@ class NoteDeMusique extends SCCube{
 				sinon elle se trouve avant le LA
 					on divise par la puissance de nbreDemiTon
 		*/
-		let nbreDemiTon = noteNum - 45; // noteNum du LA octave 3
+		let nbreDemiTon = this.noteNum - 45; // noteNum du LA octave 3
 		return 440 * Math.pow(mdf,nbreDemiTon);
 	}
 	
@@ -84,8 +84,8 @@ class NoteDeMusique extends SCCube{
 		rect.setAttribute("width", 50);
 		rect.setAttribute("height", 50);
 
-		rect.setAttribute("x", x);
-		rect.setAttribute("y", y);
+		rect.setAttribute("x", this.x);
+		rect.setAttribute("y", this.y);
 		let texte = document.createTextNode(id);
 		rect.appendChild(texte);
 		return rect;
