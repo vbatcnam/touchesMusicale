@@ -17,9 +17,11 @@ class NoteDeMusique extends SCCube{
 		this.octave = octave;
 		this.x = x; 
 		this.y = y;
+		this.h = 50;
+		this.w = 50;
 		this.color = this.attribueUneCouleurHSL();
 		this.hertz = this.attribueUnHertz();
-		this.illustration = this.DessineMoi();
+		this.toucheMusicale = this.DessineMoi();
 	}
 	
 	attribueUnNumero(){
@@ -83,8 +85,8 @@ class NoteDeMusique extends SCCube{
 		rect.id = this.nom;
 		// rect.setAttribute("stroke", this.color);
 		rect.setAttribute("fill", this.color);
-		rect.setAttribute("width", 50);
-		rect.setAttribute("height", 50);
+		rect.setAttribute("width", this.w);
+		rect.setAttribute("height", this.h);
 
 		rect.setAttribute("x", this.x);
 		rect.setAttribute("y", this.y);
@@ -109,12 +111,14 @@ class NoteDeMusique extends SCCube{
 		return {//les infos envoyées
 			id:this.nom,
 			octave:this.octave,
-			color : this.color;
-			hertz : this.hertz;
+			color : this.color,
+			hertz : this.hertz,
 			x:this.x,
 			y:this.y,
-			dessin:this.illustration,
-			changement:this.changement,
+			h:this.h,
+			w:this.w,
+			toucheMusicale:this.toucheMusicale,
+			changement:this.changement
 		}
 	}
 	
