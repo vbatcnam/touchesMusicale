@@ -10,6 +10,8 @@ var gamme = ['do', 'do#', 'ré', 'ré#', 'mi', 'fa', 'fa#', 'sol', 'sol#', 'la',
 class NoteDeMusique extends SCCube{
 	constructor(nom, octave, x, y){
 		super(); //Cube
+		this.oscillateur = contexteAudio.createOscillator();
+		this.oscillateur.type = "triangle"
 		this.nom = nom;
 		this.noteNum = this.attribueUnNumero();
 		this.octave = octave;
@@ -91,6 +93,12 @@ class NoteDeMusique extends SCCube{
 		return rect;
 	}
 
+	joueNote(){
+		this.oscillateur.frequency.value = this.hertz;
+		this.oscillateur.connect(contexteAudio.destination);
+		this.oscillateur.start();
+	}
+	
 	//s'allume lorsqu'on clique ou touche la note
 	anime();
 	{
