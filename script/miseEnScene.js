@@ -18,8 +18,12 @@ var wave_trombone = contexteAudio.createPeriodicWave(
 	new Float32Array(trombone.imag)
 );
 
-instrument.addNote = monde.addProgram;
+//Création de la machine SugarCubes
+var instrument = SC.machine(25)
+instrument.addNote = instrument.addProgram;
 
 //créer un tableau avec les notes (il y a 9 games, on va en faire 3.
 //teste une note
-instrument.addNote(new NoteDeMusique("la", 3, 10, 10)));
+instrument.addNote( new NoteDeMusique( "la", 3, 10, 10) );
+console.log("instrument");
+console.log(instrument);

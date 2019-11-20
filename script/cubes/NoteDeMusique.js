@@ -13,15 +13,16 @@ class NoteDeMusique extends SCCube{
 		this.oscillateur = contexteAudio.createOscillator();
 		this.oscillateur.type = "triangle"
 		this.nom = nom;
-		this.noteNum = this.attribueUnNumero();
 		this.octave = octave;
+		this.noteNum = this.attribueUnNumero();
+		console.log('note => ' + this.noteNum);
 		this.x = x; 
 		this.y = y;
 		this.h = 50;
 		this.w = 50;
 		this.color = this.attribueUneCouleurHSL();
 		this.hertz = this.attribueUnHertz();
-		this.toucheMusicale = this.DessineMoi();
+		this.toucheMusicale = this.fabriqueMoi();
 	}
 	
 	attribueUnNumero(){
@@ -33,14 +34,15 @@ class NoteDeMusique extends SCCube{
 		}
 	}
 	
-	attribueUneCouleur()
+	attribueUneCouleurHSL()
 	{
 		/**
 			Chaque note à une couleur de l'arc en ciel
 		*/
 		//teinte en %
 		let tabColor = [0, 15, 30, 45, 60, 120, 150, 180, 210, 240, 255,270];
-		let h = tabColor[this.noteNum]; //teinte
+		let num = gamme.indexOf(this.nom)
+		let h = tabColor[num]; //teinte
 		let s = 100; //saturation
 		
 		/**
@@ -49,7 +51,8 @@ class NoteDeMusique extends SCCube{
 		//octave de 0 à 9. luminosité en %
 		let tabLum = [10,20,35,50,60,67,74,80,85,90];
 		let l = tabLum[this.octave]; //luminosité
-		return 'hsl(${h},${s}%,${l}%)';
+		console.log(`hsl(${h},${s}%,${l}%)`)
+		return `hsl(${h},${s}%,${l}%)`;
 	}
 	
 	attribueUnHertz()
@@ -66,7 +69,6 @@ class NoteDeMusique extends SCCube{
 			Si je fais 440 / mdf / mdf, j'aurai sol de l'octave 3
 		*/
 		let mdf =  Math.pow(2,1/12); //multiplicateurDeFrequence
-		
 		/** nbreDemiTon
 			============
 			Nombre de demi tons qui sépare la note du LA octave 3 (noteNum 45)
@@ -75,24 +77,37 @@ class NoteDeMusique extends SCCube{
 				sinon elle se trouve avant le LA
 					on divise par la puissance de nbreDemiTon
 		*/
-		let nbreDemiTon = this.noteNum - 45; // noteNum du LA octave 3
+		let nbreDemiTon = this.noteNum - 45; // noteNum du LA octave 3		
 		return 440 * Math.pow(mdf,nbreDemiTon);
 	}
 	
 
-	dessineMoi(){
+	fabriqueMoi(){
+		//Crée la balise rect
 		let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 		rect.id = this.nom;
 		// rect.setAttribute("stroke", this.color);
 		rect.setAttribute("fill", this.color);
 		rect.setAttribute("width", this.w);
 		rect.setAttribute("height", this.h);
-
 		rect.setAttribute("x", this.x);
 		rect.setAttribute("y", this.y);
-		
-		let texte = document.createTextNode(id);
+		let texte = document.createTextNode(this.nom);
 		rect.appendChild(texte);
+		
+		//ajout un event
+		rect.addEventListener('mousedown',this.joueNote);
+		rect.addEventListener('mouseup',function(evt){
+			this.oscillateur.stop();
+		});
+		rect.addEventListener('touchstart ',this.joueNote);
+		rect.addEventListener('touchend',function(evt){
+			this.oscillateur.stop();
+		});
+		
+		
+		//Se dessine à l'écran
+		zoneSVG.appendChild(rect);
 		return rect;
 	}
 
@@ -103,8 +118,7 @@ class NoteDeMusique extends SCCube{
 	}
 	
 	//s'allume lorsqu'on clique ou touche la note
-	anime();
-	{
+	anime(){
 		this.changement = '';//A faire
 	}
 
