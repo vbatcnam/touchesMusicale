@@ -80,7 +80,7 @@ class NoteDeMusique extends SCCube{
 	}
 	
 
-	static dessineMoi(){
+	dessineMoi(){
 		let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 		rect.id = this.nom;
 		// rect.setAttribute("stroke", this.color);
@@ -90,6 +90,7 @@ class NoteDeMusique extends SCCube{
 
 		rect.setAttribute("x", this.x);
 		rect.setAttribute("y", this.y);
+		
 		let texte = document.createTextNode(id);
 		rect.appendChild(texte);
 		return rect;
@@ -121,5 +122,6 @@ class NoteDeMusique extends SCCube{
 			changement:this.changement
 		}
 	}
-	
+	//ecoute les evenements du DOM
+	$on_clickOrTouchedEvent(){}
 }
