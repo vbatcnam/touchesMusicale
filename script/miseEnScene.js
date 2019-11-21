@@ -22,8 +22,12 @@ var wave_trombone = contexteAudio.createPeriodicWave(
 var instrument = SC.machine(25)
 instrument.addNote = instrument.addProgram;
 
-//créer un tableau avec les notes (il y a 9 games, on va en faire 3.
-//teste une note
-instrument.addNote( new NoteDeMusique( "la", 3, 10, 10) );
+//créer un tableau avec les notes (il y a 9 gammes, on va en faire 3.
+//teste une gamme
+var x = 10;
+for(var note of gamme){
+	instrument.addNote( new NoteDeMusique( note, 3, x, 10) );
+	x = x+50;
+}
 //console.log("instrument");
 //console.log(instrument);
