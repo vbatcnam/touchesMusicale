@@ -16,11 +16,11 @@ class NoteDeMusique extends SCCube{
 		this.noteNum = this.attribueUnNumero();
 		this.x = x; 
 		this.y = y;
-		this.h = 50;
-		this.w = 50;
+		this.height = 50;
+		this.width = 50;
 		this.color = this.attribueUneCouleurHSL();
 		this.hertz = this.attribueUnHertz();
-		this.toucheMusicale = this.fabriqueMoi();
+		this.toucheMusicale = this.drawMe();
 	}
 	
 	attribueUnNumero(){
@@ -40,16 +40,16 @@ class NoteDeMusique extends SCCube{
 		//teinte en %
 		let tabColor = [0, 15, 30, 45, 60, 120, 150, 180, 210, 240, 255,270];
 		let num = gamme.indexOf(this.nom)
-		let h = tabColor[num]; //teinte
-		let s = 100; //saturation
+		this.hue = tabColor[num]; //teinte
+		this.saturation = 100; //saturation
 		
 		/**
 			On se base sur le LA 440 hertz, octave 3 : la luminosité est à 50% 
 		*/
 		//octave de 0 à 9. luminosité en %
 		let tabLum = [10,20,35,50,60,67,74,80,85,90];
-		let l = tabLum[this.octave]; //luminosité
-		return `hsl(${h},${s}%,${l}%)`;
+		this.lightness = tabLum[this.octave]; //luminosité
+		return `hsl(${this.hue},${this.saturation}%,${this.lightness}%)`;
 	}
 	
 	attribueUnHertz()
@@ -79,14 +79,14 @@ class NoteDeMusique extends SCCube{
 	}
 	
 
-	fabriqueMoi(){
+	drawMe(){
 		//Crée la balise rect
 		let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 		rect.id = this.nom;
 		// rect.setAttribute("stroke", this.color);
 		rect.setAttribute("fill", this.color);
-		rect.setAttribute("width", this.w);
-		rect.setAttribute("height", this.h);
+		rect.setAttribute("width", this.width);
+		rect.setAttribute("height", this.height);
 		rect.setAttribute("x", this.x);
 		rect.setAttribute("y", this.y);
 		let texte = document.createTextNode(this.nom);
@@ -94,13 +94,9 @@ class NoteDeMusique extends SCCube{
 		
 		//ajout un event
 		rect.addEventListener('mousedown',this.joueNote.bind(this));
-		rect.addEventListener('mouseup',(function(evt){
-			this.oscillateur.stop();
-		}).bind(this));
+		rect.addEventListener('mouseup',this.stopNote.bind(this));
 		rect.addEventListener('touchstart',this.joueNote.bind(this));
-		rect.addEventListener('touchend',(function(evt){
-			this.oscillateur.stop();
-		}).bind(this));
+		rect.addEventListener('touchend',this.stopNote.bind(this));
 		
 		
 		//Se dessine à l'écran
@@ -112,20 +108,26 @@ class NoteDeMusique extends SCCube{
 	}
 
 	joueNote(){
+		//Création de l'ossiateur
 		this.oscillateur = contexteAudio.createOscillator();		
 		this.oscillateur.type = "triangle"
 		this.oscillateur.frequency.value = this.hertz;
 		this.oscillateur.connect(contexteAudio.destination);
 		this.oscillateur.start();
+		
+		//changement de couleur du rectangle
+		this.lightness = 35; 
+		this.color = `hsl(${this.hue},${this.saturation}%,${this.lightness}%)`;
+		this.drawMe();
 	}
 	
 	stopNote(){
-	
+		this.oscillateur.stop()
+		this.lightness = 50; 
+		this.color = `hsl(${this.hue},${this.saturation}%,${this.lightness}%)`;
+		this.drawMe();
 	}
-	//s'allume lorsqu'on clique ou touche la note
-	anime(){
-		this.changement = '';//A faire
-	}
+
 
 	$publicVar_monApparence(){
 		return {//les infos envoyées
@@ -138,8 +140,7 @@ class NoteDeMusique extends SCCube{
 			y:this.y,
 			h:this.h,
 			w:this.w,
-			toucheMusicale:this.toucheMusicale,
-			changement:this.changement
+			toucheMusicale:this.toucheMusicale,//Le rect svg
 		}
 	}
 	//ecoute les evenements du DOM
