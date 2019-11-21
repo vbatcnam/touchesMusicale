@@ -4,6 +4,18 @@
 	Auteur : Véronique Lion
 	Date création : 2019-10-10 16:02:38
 	Copyright : © Véronique Lion 2019
+	
+	Version sans sugarCubesJS
+	Problème : sur tablette si on touche 2 notes ça bugue.
+	Il faudrait créer un tableau ou une liste d'oscilateurs pour pouvoir jouer plusieures notes à la fois.
+	Pour tester, retirer de index.html (ou mettre en commentaire)
+		<script src="script/utilitaire/SugarCubes.js"></script>
+		<script src="script/utilitaire/syntaxeSimplifieeSC.js"></script>
+		<script src="script/cubes/noteDeMusique.js"></script>
+	Retirer les commentaires sur
+		<script src="script/noteMusique.js"></script>
+		
+	Je ne l'ai pas retesté depuis la version avec sugarCubes, je ne sais pas si ça marche toujurs...
 
 L'interface AudioContext représente un graphe de traitement audio fait de modules audio reliés entre eux, chaque module correspondant à un AudioNode. Un contexte audio contrôle à la fois la création des nœuds qu'il contient et l'exécution du traitement audio, ou du décodage. On commence toujours par créer un contexte audio, et tout ce qui va se passer ensuite se situera dans ce contexte.
 */
