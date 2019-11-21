@@ -38,7 +38,7 @@ class NoteDeMusique extends SCCube{
 			Chaque note à une couleur de l'arc en ciel
 		*/
 		//teinte en %
-		let tabColor = [0, 15, 30, 45, 60, 120, 150, 180, 210, 240, 255,270];
+		let tabColor = [0, 20, 30, 45, 60, 100, 160, 180, 210, 220, 260,270];
 		let num = gamme.indexOf(this.nom)
 		this.hue = tabColor[num]; //teinte
 		this.saturation = 100; //saturation
