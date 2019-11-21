@@ -10,12 +10,10 @@ var gamme = ['do', 'do#', 'ré', 'ré#', 'mi', 'fa', 'fa#', 'sol', 'sol#', 'la',
 class NoteDeMusique extends SCCube{
 	constructor(nom, octave, x, y){
 		super(); //Cube
-		this.oscillateur = contexteAudio.createOscillator();
-		this.oscillateur.type = "triangle"
+		this.oscillateur;
 		this.nom = nom;
 		this.octave = octave;
 		this.noteNum = this.attribueUnNumero();
-		console.log('note => ' + this.noteNum);
 		this.x = x; 
 		this.y = y;
 		this.h = 50;
@@ -51,7 +49,6 @@ class NoteDeMusique extends SCCube{
 		//octave de 0 à 9. luminosité en %
 		let tabLum = [10,20,35,50,60,67,74,80,85,90];
 		let l = tabLum[this.octave]; //luminosité
-		console.log(`hsl(${h},${s}%,${l}%)`)
 		return `hsl(${h},${s}%,${l}%)`;
 	}
 	
@@ -96,27 +93,35 @@ class NoteDeMusique extends SCCube{
 		rect.appendChild(texte);
 		
 		//ajout un event
-		rect.addEventListener('mousedown',this.joueNote);
-		rect.addEventListener('mouseup',function(evt){
+		rect.addEventListener('mousedown',this.joueNote.bind(this));
+		rect.addEventListener('mouseup',(function(evt){
 			this.oscillateur.stop();
-		});
-		rect.addEventListener('touchstart ',this.joueNote);
-		rect.addEventListener('touchend',function(evt){
+		}).bind(this));
+		rect.addEventListener('touchstart',this.joueNote.bind(this));
+		rect.addEventListener('touchend',(function(evt){
 			this.oscillateur.stop();
-		});
+		}).bind(this));
 		
 		
 		//Se dessine à l'écran
 		zoneSVG.appendChild(rect);
+		//console.log("Fabrique-moi => oscilateur");
+		//console.log(this.oscillateur);
+		//console.log(this.oscillateur.frequency.value = this.hertz);
 		return rect;
 	}
 
 	joueNote(){
+		this.oscillateur = contexteAudio.createOscillator();		
+		this.oscillateur.type = "triangle"
 		this.oscillateur.frequency.value = this.hertz;
 		this.oscillateur.connect(contexteAudio.destination);
 		this.oscillateur.start();
 	}
 	
+	stopNote(){
+	
+	}
 	//s'allume lorsqu'on clique ou touche la note
 	anime(){
 		this.changement = '';//A faire
@@ -127,6 +132,7 @@ class NoteDeMusique extends SCCube{
 			id:this.nom,
 			octave:this.octave,
 			color : this.color,
+			oscillateur : this.oscillateur,
 			hertz : this.hertz,
 			x:this.x,
 			y:this.y,

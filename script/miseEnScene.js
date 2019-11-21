@@ -25,5 +25,5 @@ instrument.addNote = instrument.addProgram;
 //créer un tableau avec les notes (il y a 9 games, on va en faire 3.
 //teste une note
 instrument.addNote( new NoteDeMusique( "la", 3, 10, 10) );
-console.log("instrument");
-console.log(instrument);
+//console.log("instrument");
+//console.log(instrument);
