@@ -109,7 +109,7 @@ class NoteDeMusique extends SCCube{
 
 	joueNote(){
 		//Création de l'ossiateur
-		this.oscillateur = contexteAudio.createOscillator();		
+		this.oscillateur = contexteAudio.createOscillator();
 		this.oscillateur.type = "triangle"
 		this.oscillateur.frequency.value = this.hertz;
 		this.oscillateur.connect(contexteAudio.destination);
@@ -128,7 +128,6 @@ class NoteDeMusique extends SCCube{
 		this.drawMe();
 	}
 
-
 	$publicVar_monApparence(){
 		return {//les infos envoyées
 			id:this.nom,
@@ -143,6 +142,4 @@ class NoteDeMusique extends SCCube{
 			toucheMusicale:this.toucheMusicale,//Le rect svg
 		}
 	}
-	//ecoute les evenements du DOM
-	$on_clickOrTouchedEvent(){}
 }
