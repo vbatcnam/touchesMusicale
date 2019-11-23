@@ -20,7 +20,7 @@ class NoteDeMusique extends SCCube{
 		this.width = 50;
 		this.color = this.attribueUneCouleurHSL();
 		this.hertz = this.attribueUnHertz();
-		this.toucheMusicale = this.drawMe();
+		this.rectToucheMusicale = this.drawMe();
 	}
 	
 	attribueUnNumero(){
@@ -94,6 +94,7 @@ class NoteDeMusique extends SCCube{
 		
 		//ajout un event
 		rect.addEventListener('mousedown',this.joueNote.bind(this));
+		rect.addEventListener('mouseout',this.stopNote.bind(this));
 		rect.addEventListener('mouseup',this.stopNote.bind(this));
 		rect.addEventListener('touchstart',this.joueNote.bind(this));
 		rect.addEventListener('touchend',this.stopNote.bind(this));
@@ -107,7 +108,7 @@ class NoteDeMusique extends SCCube{
 		return rect;
 	}
 
-	joueNote(){
+	joueNote(evt){console.log("je joue", evt.type, evt.target.id);
 		//Création de l'ossiateur
 		this.oscillateur = contexteAudio.createOscillator();
 		this.oscillateur.type = "triangle"
@@ -118,14 +119,20 @@ class NoteDeMusique extends SCCube{
 		//changement de couleur du rectangle
 		this.lightness = 35; 
 		this.color = `hsl(${this.hue},${this.saturation}%,${this.lightness}%)`;
-		this.drawMe();
+		this.rectToucheMusicale.fill = this.color;
 	}
 	
-	stopNote(){
-		this.oscillateur.stop()
-		this.lightness = 50; 
-		this.color = `hsl(${this.hue},${this.saturation}%,${this.lightness}%)`;
-		this.drawMe();
+	stopNote(evt){
+		if(this.oscillateur){//tester si une note est en train de se jouer
+			console.log("je ne joue plus", evt.type, evt.target.id);
+			this.oscillateur.stop()
+			this.lightness = 50; 
+			this.color = `hsl(${this.hue},${this.saturation}%,${this.lightness}%)`;
+			this.rectToucheMusicale.fill = this.color;
+		}
+		else{console.log("Il n'y avait aucun son !", evt.type, evt.target.id)
+			return;
+		}
 	}
 
 	$publicVar_monApparence(){
@@ -139,7 +146,7 @@ class NoteDeMusique extends SCCube{
 			y:this.y,
 			h:this.h,
 			w:this.w,
-			toucheMusicale:this.toucheMusicale,//Le rect svg
+			rectToucheMusicale:this.rectToucheMusicale,//Le rect svg
 		}
 	}
 }
